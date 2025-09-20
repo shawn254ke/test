@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test API Call</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center h-screen bg-gray-100">
+  <div class="bg-white shadow-lg rounded-2xl p-8 w-96 text-center">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">API Test</h1>
+    
+    <button 
+      id="testButton" 
+      class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition duration-200">
+      Test
+    </button>
+
+    <div id="responseBox" class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-700 hidden"></div>
+  </div>
+
+  <script>
+    const button = document.getElementById("testButton");
+    const responseBox = document.getElementById("responseBox");
+
+    button.addEventListener("click", async () => {
+      responseBox.classList.remove("hidden");
+      responseBox.textContent = "Sending POST request...";
+
+      try {
+        const res = await fetch("https://7b7d2d4eb2f5.ngrok-free.app/test", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "ngrok-skip-browser-warning": "true" // ✅ skip ngrok warning
+          },
+          body: JSON.stringify({ message: "Hello from frontend" }) // sample payload
+        });
+
+        const data = await res.text(); // use res.json() if backend returns JSON
+        responseBox.textContent = `✅ Response: ${data}`;
+      } catch (error) {
+        responseBox.textContent = `❌ Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
